@@ -38,6 +38,8 @@
 "pages/country/[cid].jsx"
 ,
 "components/TradeModal/TradeModal.jsx"
+,
+"components/BlockchainApi/Staking.jsx"
 ],
   "exclude": [
     "node_modules",

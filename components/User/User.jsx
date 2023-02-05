@@ -132,10 +132,7 @@ const User = () => {
               <br />
               <Staking id={trade.id} />
               <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white ">
-
               </h3>
-
-
             </div>
           )
         })}
