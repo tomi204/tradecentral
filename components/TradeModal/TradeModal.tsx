@@ -1,8 +1,9 @@
 import { BigNumber, ethers } from "ethers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 import lighthouse from '@lighthouse-web3/sdk';
+import { FaDollarSign, FaEthereum } from "react-icons/fa";
 const API_KEY = process.env.NEXT_PUBLIC__LIGHTHOUSE_API
 
 
@@ -80,6 +81,18 @@ const Modal = () => {
   });
   const { write, isLoading, isSuccess, data } = useContractWrite(config);
 
+  const [ethPrice, setEthPrice] = useState(0);
+  const getEthPrice = async () => {
+    const response = await fetch("https://api.coinlore.net/api/ticker/?id=80");
+    const data = await response.json(); // Extracting data as a JSON Object from the response
+    const parseNumber1 = data[0].price_usd;
+
+    setEthPrice(parseNumber1);
+  };
+
+  useEffect(() => {
+    getEthPrice();
+  }, []);
  
 
   const handleFrom = (e: React.FormEvent<HTMLFormElement>) => {
@@ -162,8 +175,8 @@ const progressCallback = (progressData: ProgressData) => {
                       <input value={name} type="text" name="brand" id="brand" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Product brand" />
                     </div> */}
                     <div>
-                      <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                      <input defaultValue={price} onChange={(e) => setPrice(+e.target.value)} type="number" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" />
+                      <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center flex ">Price <FaEthereum className="mx-1	" />{price / ethPrice} </label>
+                      <input  onChange={(e) => setPrice(+e.target.value)} type="number" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" />
                     </div>
                     <div>
                       <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>

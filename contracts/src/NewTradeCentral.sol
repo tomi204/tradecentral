@@ -151,13 +151,4 @@ contract TradeCentral is ReentrancyGuard {
         delete trades[_itemId];
     }
 
-    // //@dev function for withdraw one trade
-    // function cancelAllTrades() public nonReentrant {
-    //     require(msg.sender != address(0), "Invalid address");
-    //     for (uint256 i = 1; i <= tradeCount; i++) {
-    //         if (trades[i].seller == msg.sender) {
-    //             delete trades[i];
-    //         }
-    //     }
-    // }
 }
