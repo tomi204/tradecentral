@@ -76,17 +76,6 @@ export ETHERSCAN_API_KEY=FTS9SQ5P7K31STQ5V5YTCJ68R6IZFGWBXN
 forge script script/TradeCentral.s.sol:TradeCentralScript --rpc-url $GOERLI_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify --etherscan-api-key $ETHERSCAN_API_KEY  -vvvv
 ```
 
-### Hardhat Scripts
-
-Script to deploy dummy data to the contract
-
-```console
-cd hardhat
-npm install
-npx hardhat run deploy.ts --network localhost
-npx hardhat run deploy.ts --network goeril
-```
-
 ### Project structure
   
 ```console
