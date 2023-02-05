@@ -36,6 +36,8 @@
 "pages/category/[cid].jsx"
 ,
 "pages/country/[cid].jsx"
+,
+"components/TradeModal/TradeModal.jsx"
 ],
   "exclude": [
     "node_modules",

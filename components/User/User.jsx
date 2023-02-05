@@ -117,19 +117,22 @@ const User = () => {
           return (
 
             <div key={trade.id} className="items-center justify-center flex flex-col">
-              <h1>{trade.name}</h1>
-              <Cancel id={trade.id} />
-              <Staking id={trade.id} />
+              <br />
+              {trade.name ? (<span className="text-white-500 ">{trade.name}</span>) : trimAddress(trade.address)}
+              <br />
               {trade.image ? (
-                <Image width={40} height={40} className="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src={trade.image} alt={`${trade.name ? trade.name : trimAddress(trade.address)} avatar`} />
+                <Image width={100} height={100} className="w-6/12 h-6/12p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src={trade.image} alt={`${trade.name ? trade.name : trimAddress(trade.address)} avatar`} />
               ) : (
                 <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                   <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
                 </div>
               )}
-
+              <br />
+              <Cancel id={trade.id} />
+              <br />
+              <Staking id={trade.id} />
               <h3 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white ">
-                {trade.name ? (<span className="text-gray-500 ">{trade.name}</span>) : trimAddress(trade.address)}
+
               </h3>
 
 

@@ -10,7 +10,7 @@ const API_KEY = process.env.NEXT_PUBLIC__LIGHTHOUSE_API
 const Modal = () => {
   const [showModal, setShowModal] = useState(false);
   const { address, isConnected } = useAccount();
-  const [price, setPrice] = useState(99);
+  const [price, setPrice] = useState("0");
   const [tokenURI, setTokenURI] = useState("imghash");
   const [name, setName] = useState("name");
   const [desc, setDesc] = useState("desc");
@@ -18,56 +18,65 @@ const Modal = () => {
   const [country, setCountry] = useState("");
   // const { chain } = useNetwork()
 
+
+  function parsePrice() {
+    if (price > "0") {
+      const priceInWei = ethers.utils.parseEther(price);
+      return priceInWei;
+    }
+  }
+
+
+
   //@dev wagmi function 
-  const chainId = +process.env.NEXT_PUBLIC_CHAIN_ID!
   const { config } = usePrepareContractWrite({
     address: CONTRACT_ADDRESS,
-    chainId,
+    chainId: 5,
     overrides: {
       from: address,
       gasLimit: BigNumber.from(1000000),
     },
     abi: [
-     	{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_price",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "_name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_description",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_category",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_country",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_image",
-						"type": "string"
-					}
-				],
-				"name": "createTrade",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "_name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_category",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_country",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_image",
+            "type": "string"
+          }
+        ],
+        "name": "createTrade",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
     ],
-    args: [ethers.BigNumber.from(price), name, desc, tokenURI, country, category],
+    args: [parsePrice(), name, desc, tokenURI, country, category],
     functionName: "createTrade",
     onError(err) {
       console.log("error", err)
@@ -93,9 +102,9 @@ const Modal = () => {
   useEffect(() => {
     getEthPrice();
   }, []);
- 
 
-  const handleFrom = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleFrom = (e) => {
     e.preventDefault();
     console.log("submitting form");
     // TODO: validate from before submit
@@ -105,21 +114,14 @@ const Modal = () => {
 
 
   //light house 
- 
 
-interface ProgressData {
-  total: number;
-  uploaded: number;
-}
-
-const progressCallback = (progressData: ProgressData) => {
-  if(progressData){
-    let percentageDone = ((progressData.uploaded / progressData.total) * 100)?.toFixed(2);
+  const progressCallback = (progressData) => {
+    let percentageDone =
+      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
     console.log(percentageDone);
-  }
-};
+  };
 
-  const deploy = async (e: any) => {
+  const deploy = async (e) => {
     // Push file to lighthouse node
     const output = await lighthouse.upload(e, "38052b02-fa7c-44e9-beba-0df2baa98eea", progressCallback);
     const uri = 'https://gateway.lighthouse.storage/ipfs/' + output.data.Hash;
@@ -168,7 +170,7 @@ const progressCallback = (progressData: ProgressData) => {
                   <div className="grid gap-4 mb-4 sm:grid-cols-2">
                     <div>
                       <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" >Name</label>
-                      <input defaultValue={name} onChange={(e) => setName(e.target.value)} type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" />
+                      <input onChange={(e) => setName(e.target.value)} type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" />
                     </div>
                     {/* <div>
                       <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
@@ -176,29 +178,29 @@ const progressCallback = (progressData: ProgressData) => {
                     </div> */}
                     <div>
                       <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center flex ">Price <FaEthereum className="mx-1	" />{price / ethPrice} </label>
-                      <input  onChange={(e) => setPrice(+e.target.value)} type="number" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" />
+                      <input onChange={(e) => setPrice(e.target.value)} type="text" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" />
                     </div>
                     <div>
                       <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
                       <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         <option defaultValue="">Select category</option>
-                        <option  value="TV/Monitors">TV/Monitors</option>
+                        <option value="TV/Monitors">TV/Monitors</option>
                         <option value="PC">PC</option>
                         <option value="Gaming/Console">Gaming/Console</option>
-                        <option  value="Phones">Phones</option>
+                        <option value="Phones">Phones</option>
                       </select>
                     </div>
-                     <div>
+                    <div>
                       <label htmlFor="Country" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                      <input defaultValue={"brasil"} onChange={(e) => setCountry(e.target.value)} type="text" name="Country" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="France" />
+                      <input onChange={(e) => setCountry(e.target.value)} type="text" name="Country" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="France" />
                     </div>
                     <div className="sm:col-span-2">
                       <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                      <textarea defaultValue={desc} onChange={(e) => setDesc(e.target.value)} id="description" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write product description here"></textarea>
+                      <textarea onChange={(e) => setDesc(e.target.value)} id="description" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write product description here"></textarea>
                     </div>
                     <div>
                       <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
-                      <input  onChange={e=>deploy(e)} type="file" name="image" id="image" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" />
+                      <input onChange={e => deploy(e)} type="file" name="image" id="image" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" />
                     </div>
                   </div>
                   <button disabled={!write} type="submit" className="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
