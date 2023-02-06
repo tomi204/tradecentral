@@ -65,10 +65,10 @@ const TradePage = () => {
 
           {/* Buy CTA */}
           {item.price && (<div className="flex  items-center m-5 justify-center">
-            <span className="text-2xl font-bold items-inline text-gray-900 m-3 w-6/12 dark:text-white"><FaEthereum className='w-full flex items-center mx-auto' />{`${utils.formatUnits(item.price).slice(0, 5)}`}</span>
-            <span className="text-2xl font-bold items-inline text-gray-900 m-3 w-6/12 dark:text-white"><FaDollarSign className='w-full flex items-center mx-auto' /> {(
-              ethers.utils.formatEther(item.price) * ethPrice
-            ).toFixed(4)}</span>
+            <span className="text-2xl font-bold items-inline text-gray-900 m-3 w-6/12 dark:text-white"><FaEthereum className='w-full flex items-center mx-auto' /> {(ethers.utils.formatEther(item.price) / ethPrice).toFixed(5)}</span>
+            <span className="text-2xl font-bold items-inline text-gray-900 m-3 w-6/12 dark:text-white"><FaDollarSign className='w-full flex items-center mx-auto' />  {ethers.utils
+              .formatEther(item.price)
+              ?.substring(0, 9)}</span>
 
           </div>)}
           <BuyTrade id={item.id} price={item.price} />
