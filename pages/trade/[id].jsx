@@ -62,8 +62,6 @@ const TradePage = () => {
           </div>
           <h1 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{item.name}</h1>
           <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{item.description}</h2>
-
-          {/* Buy CTA */}
           {item.price && (<div className="flex  items-center m-5 justify-center">
             <span className="text-2xl font-bold items-inline text-gray-900 m-3 w-6/12 dark:text-white"><FaEthereum className='w-full flex items-center mx-auto' /> {(ethers.utils.formatEther(item.price) / ethPrice).toFixed(5)}</span>
             <span className="text-2xl font-bold items-inline text-gray-900 m-3 w-6/12 dark:text-white"><FaDollarSign className='w-full flex items-center mx-auto' />  {ethers.utils
