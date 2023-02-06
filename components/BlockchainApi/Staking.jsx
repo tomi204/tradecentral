@@ -43,7 +43,7 @@ const Staking = (id) => {
   const { data, isLoading, isSuccess, write, isError } = useContractWrite(config);
   console.log(trades)
 
-  const bool = trades.some((trade) => trade.staking === true);
+  const bool = trades.some((trade) => trade.isSold === true);
   console.log(bool, "bool")
   return (
     <>
