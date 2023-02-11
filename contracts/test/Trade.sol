@@ -29,27 +29,39 @@ contract testTradeCentral is Test {
     }
 
     function createTrade() public {
-       ///create trade
-       string memory _name = "Trade 1";
-       string memory _description = "Trade 1 description";
-       string memory _image = "https://i.imgur.com/1ZQZ1YR.png";
-       string memory _category = "TV/MONITORES";
-       string memory _location = "Argentina";
+        ///create trade
+        string memory _name = "Trade 1";
+        string memory _description = "Trade 1 description";
+        string memory _image = "https://i.imgur.com/1ZQZ1YR.png";
+        string memory _category = "TV/MONITORES";
+        string memory _location = "Argentina";
 
-         trade.createTrade(200,_name, _description, _image, _category, _location);
+        trade.createTrade(
+            200,
+            _name,
+            _description,
+            _image,
+            _category,
+            _location
+        );
     }
 
-    function cancelTrade() public{
+    function cancelTrade() public {
         // cancel trade
         trade.cancelTrade(1);
     }
 
-    function updateUserProfile() public{
+    function updateUserProfile() public {
         vm.prank(tomi);
-         string memory _email = "tomi@hotmail.com";
+        string memory _email = "tomi@hotmail.com";
         string memory _name = "Tomi";
         string memory image = "https://i.imgur.com/1ZQZ1YR.png";
 
         trade.updateProfile(_email, _name, image);
+    }
+
+    function testLookTrade() public view {
+        // look trade
+        trade.lookTrades(1);
     }
 }

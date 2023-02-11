@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract TradeCentral is ReentrancyGuard {
     //@dev global variables
     address public owner;
-
     uint256 userCount;
     uint256 tradeCount;
 
@@ -25,7 +24,7 @@ contract TradeCentral is ReentrancyGuard {
         bool staking;
     }
 
-    struct userData {
+    struct userData {// user data
         uint256 userId;
         address user;
         string email;
